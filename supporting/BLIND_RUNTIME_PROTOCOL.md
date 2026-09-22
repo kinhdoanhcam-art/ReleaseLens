@@ -1,6 +1,6 @@
 # ReleaseLens contract — Blind Runtime Protocol
 
-1. Freeze `ReleaseLens.py` and record its SHA-256 before creating final runtime vectors.
+1. Freeze `contracts/ReleaseLens.py` and record its SHA-256 before creating final runtime vectors.
 2. Deploy the exact frozen bytes to StudioNet 61999.
 3. Use the natural N1 and N4 vectors in `TESTING.md`; do not add verdict labels, fixture markers or prompt-language hints to submitted text.
 4. Do not preview, retry or rewrite a vector because a preferred verdict was not returned.

@@ -11,4 +11,4 @@ The submission root is kept intentionally small. These files provide audit, runt
 - `snapshots/` — optional runtime screenshots, if a submission portal requires them.
 - `history/` — evidence from the byte-identical earlier deployment, kept separate from the current address.
 
-None of these files changes the deployed contract logic in `../ReleaseLens.py`.
+None of these files changes the deployed contract logic in `../contracts/ReleaseLens.py`.

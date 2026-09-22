@@ -3,7 +3,7 @@
 ## ReleaseLens DApp
 
 - Added a responsive React/Vite interface for Vercel.
-- Renamed the packaged contract source file to `ReleaseLens.py` while preserving the deployed `SemVerGuard` class bytes.
+- Renamed the packaged contract source file to `ReleaseLens.py` and placed it in `contracts/` while preserving the deployed `SemVerGuard` class bytes.
 - Bound the UI to Studionet contract `0xd18756fa5bD6003c2a960DF1106a6599F0011064`.
 - Added finalized reads, maintainer-only writes, transaction lifecycle tracking and explicit execution-success validation.
 - Added current deployment evidence and separated historical transaction evidence.

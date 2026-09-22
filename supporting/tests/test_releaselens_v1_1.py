@@ -7,7 +7,7 @@ import unittest
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-CONTRACT_PATH = ROOT / "ReleaseLens.py"
+CONTRACT_PATH = ROOT / "contracts" / "ReleaseLens.py"
 
 
 class UserError(Exception):

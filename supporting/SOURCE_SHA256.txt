@@ -1,4 +1,4 @@
-bcb38cc46512ead09f762368070f7c2389c1f80aa8dfb4b74549f3a9e56996ad  ReleaseLens.py
+bcb38cc46512ead09f762368070f7c2389c1f80aa8dfb4b74549f3a9e56996ad  contracts/ReleaseLens.py
 
 Computed from the LF contract source bytes packaged with ReleaseLens.
 RPC raw deployed-source SHA-256:
