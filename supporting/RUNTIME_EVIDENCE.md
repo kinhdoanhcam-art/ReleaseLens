@@ -10,7 +10,7 @@
 - GenVM result shown by Studio/Explorer: `SUCCESS`
 - Source SHA-256: `bcb38cc46512ead09f762368070f7c2389c1f80aa8dfb4b74549f3a9e56996ad`
 
-## Finalized read smoke test
+## Finalized read smoke test after proposal, before activation
 
 Checked through `genlayer-js@1.1.8` against the current address:
 
@@ -31,8 +31,10 @@ A task identifier together with a valid ISO 8601 UTC timestamp is accepted by th
 - GenVM execution result: `SUCCESS`
 - Equivalence output: `NON_BREAKING`
 - Finalized post-state: version `1.0`, `has_pending=True`, `pending_classification=NON_BREAKING`
-- Proposal transaction hash: `EVIDENCE INCOMPLETE — copy the full hash from Explorer before final submission`
-- Proposal evidence status: `INCOMPLETE` — execution and postcondition are verified, but the full proposal hash has not yet been recorded.
+- Full transaction hash: `0x85d4b13c0ea984d52e73963785d569bd545d7df8741204ee920b17fe45ed1a0b`
+- Consensus result: `Accepted`
+- Result code: `Return`
+- Proposal evidence status: `PASS`
 
 ## Current-address activation
 
@@ -50,8 +52,8 @@ A task identifier together with a valid ISO 8601 UTC timestamp is accepted by th
 - TypeScript check: PASS
 - Vite production build: PASS
 - Local deterministic contract suite: PASS — 11/11
-- Maintainer write through the ReleaseLens browser UI: `INCOMPLETE` — execution and postcondition verified; full-hash evidence remains incomplete.
-- Fresh natural semantic consensus on this address: `INCOMPLETE` — `NON_BREAKING` verified; full-hash evidence remains incomplete.
+- Maintainer write through the ReleaseLens browser UI: `PASS` — full hash, successful leader execution and finalized postcondition verified.
+- Fresh natural semantic consensus on this address: `PASS` — `NON_BREAKING`, with full transaction evidence.
 - Deterministic NON_BREAKING activation on this address: `PASS` — full hash, successful leader execution and finalized postcondition verified.
 - Long-finalization UI handling: `PASS` — production build now preserves a submitted state instead of reporting a false transaction failure after a polling timeout.
 
