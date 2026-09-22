@@ -152,10 +152,13 @@ async function writeAndWait(
   })
   const status = String(transaction.statusName || transaction.status || 'UNKNOWN')
   const result = String(transaction.txExecutionResultName || transaction.txExecutionResult || 'UNKNOWN_EXECUTION')
-  const statusOk = status === TransactionStatus.ACCEPTED || status === TransactionStatus.FINALIZED || status === '5' || status === '7'
-  const executionOk = result === ExecutionResult.FINISHED_WITH_RETURN || result === '1'
+  const leaderReceipts = transaction.consensus_data?.leader_receipt || []
+  const leaderReceipt = leaderReceipts.find((receipt) => receipt.mode === 'leader') || leaderReceipts[0]
+  const leaderExecution = String(leaderReceipt?.execution_result || '')
+  const statusOk = status === TransactionStatus.FINALIZED || status === '7'
+  const executionOk = result === ExecutionResult.FINISHED_WITH_RETURN || result === '1' || leaderExecution === 'SUCCESS'
   if (!statusOk || !executionOk) {
-    throw new Error(`Transaction finalized without success: ${status} / ${result}`)
+    throw new Error(`Transaction finalized without success: ${status} / ${result} / ${leaderExecution || 'NO_LEADER_RESULT'}`)
   }
   return String(hash)
 }
