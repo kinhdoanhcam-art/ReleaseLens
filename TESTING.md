@@ -4,7 +4,7 @@
 
 `SUBMITTED ≠ ACCEPTED ≠ FINALIZED ≠ EXECUTION SUCCESS ≠ POSTCONDITION PASS`
 
-No StudioNet case below is marked PASS until its full transaction hash, authoritative leader execution result and exact post-state are recorded in `supporting/RUNTIME_EVIDENCE.md`.
+No current-deployment StudioNet case is marked PASS until its full transaction hash, authoritative leader execution result and exact post-state are recorded in `supporting/RUNTIME_EVIDENCE.md`. Historical results are labeled separately and are not presented as current-address evidence.
 
 ## Local deterministic tests
 
@@ -22,7 +22,7 @@ python -m unittest discover -s supporting/tests -v
 
 These tests use a local GenLayer stub. They check contract state logic but are not GenVM, Direct Mode or StudioNet proof.
 
-Run `python3 -m py_compile ReleaseLens.py supporting/tests/test_releaselens_v1_1.py` for the contract compile check.
+Run `python3 -m py_compile contracts/ReleaseLens.py supporting/tests/test_releaselens_v1_1.py` for the contract compile check.
 
 ## Fresh deployment setup
 
@@ -42,9 +42,21 @@ The scheduler accepts a task identifier and an ISO 8601 UTC timestamp. It queues
 
 Initial version: `1.0`.
 
-## Runtime execution order
+## Current deployment runtime evidence
 
-Use one critical transaction at a time. Stop on any mismatch. The practical order is N5 → N1 → N3 → N2 → N4 → N4b so the invalid NON_BREAKING major activation is attempted before N2 clears the pending proposal.
+The fresh address has completed the minimum natural semantic path required by the DApp:
+
+| Case | Method | Full transaction hash | Result | Post-state | Status |
+|---|---|---|---|---|---|
+| Deploy | constructor | `0x9661d03e732fbe10c27fb24c100a313af479a98f091e03efb99c5e14a8f89873` | `SUCCESS` | version `1.0`, no pending proposal | `PASS` |
+| N1 | `propose_change` | `0x85d4b13c0ea984d52e73963785d569bd545d7df8741204ee920b17fe45ed1a0b` | `NON_BREAKING`, `SUCCESS` | version `1.0`, pending proposal locked | `PASS` |
+| N2 | `activate_pending(1, 1)` | `0x5d727efcfef7ad3ad839bec1f05e1e84ec4b4a922b9ae769a85ef70e769ac749` | `SUCCESS` | version `1.1`, no pending proposal | `PASS` |
+
+Exact parameters and post-state reads are recorded in `supporting/RUNTIME_EVIDENCE.md`.
+
+## Reference runtime sequence
+
+Use one critical transaction at a time. Stop on any mismatch. The complete regression order is N5 → N1 → N3 → N2 → N4 → N4b so the invalid NON_BREAKING major activation is attempted before N2 clears the pending proposal. Only N1 and N2 were rerun on the current address; the other results below are retained as historical byte-identical regression evidence.
 
 ### N5a — outsider proposes
 
@@ -53,7 +65,7 @@ Use one critical transaction at a time. Stop on any mismatch. The practical orde
 - Parameter: the N1 proposal below
 - Expected execution: rollback `Only maintainer`
 - Expected post-state: version `1.0`, `has_pending = false`, empty cache for this pair
-- Status: `PASS`
+- Status: `HISTORICAL PASS` — earlier byte-identical deployment; not rerun on the current address
 - CẦN SNAP: `KHÔNG CẦN`, unless result differs
 
 ### N5b — outsider activates
@@ -62,7 +74,7 @@ Use one critical transaction at a time. Stop on any mismatch. The practical orde
 - Method: `activate_pending(1, 1)`
 - Expected execution: rollback `Only maintainer`
 - Expected post-state: unchanged
-- Status: `PASS`
+- Status: `HISTORICAL PASS` — earlier byte-identical deployment; not rerun on the current address
 - CẦN SNAP: `KHÔNG CẦN`, unless result differs
 
 ### N1 — wording-only proposal
@@ -78,7 +90,7 @@ A task identifier together with a valid ISO 8601 UTC timestamp is accepted by th
 - Category: pure wording cleanup/clarification; not `units or meaning of returned values`
 - Expected verdict: `NON_BREAKING`
 - Expected post-state: version stays `1.0`, `has_pending = true`, `pending_classification = NON_BREAKING`
-- Status: `PASS`
+- Status: `PASS` — current deployment; full hash recorded above
 - CẦN SNAP: `CÓ` — first natural NON_BREAKING consensus checkpoint
 
 ### N3 — reject a major bump for NON_BREAKING
@@ -87,7 +99,7 @@ A task identifier together with a valid ISO 8601 UTC timestamp is accepted by th
 - Method: `activate_pending(2, 0)`
 - Expected execution: rollback `Non-breaking change must keep major version`
 - Expected post-state: version `1.0`; the N1 proposal remains pending and unchanged
-- Status: `PASS`
+- Status: `HISTORICAL PASS` — earlier byte-identical deployment; not rerun on the current address
 - CẦN SNAP: `KHÔNG CẦN`, unless result differs
 
 ### N2 — activate the wording-only proposal
@@ -96,7 +108,7 @@ A task identifier together with a valid ISO 8601 UTC timestamp is accepted by th
 - Method: `activate_pending(1, 1)`
 - Expected execution: success
 - Expected post-state: version `1.1`, N1 text becomes active, `has_pending = false`
-- Status: `PASS`
+- Status: `PASS` — current deployment; full hash recorded above
 - CẦN SNAP: `CÓ` — first successful NON_BREAKING activation
 
 ### N4 — compatible optional input
@@ -112,7 +124,7 @@ A task identifier together with a valid ISO 8601 UTC timestamp is accepted by th
 - Category: compatible addition to accepted input semantics; not `units or meaning of returned values`
 - Expected verdict: `NON_BREAKING`
 - Expected post-state: version stays `1.1`, `has_pending = true`, `pending_classification = NON_BREAKING`
-- Status: `PASS`
+- Status: `HISTORICAL PASS` — earlier byte-identical deployment; not rerun on the current address
 - CẦN SNAP: `CÓ` — second natural NON_BREAKING form
 
 ### N4b — activate the compatible addition
@@ -121,12 +133,12 @@ A task identifier together with a valid ISO 8601 UTC timestamp is accepted by th
 - Method: `activate_pending(1, 2)`
 - Expected execution: success
 - Expected post-state: version `1.2`, N4 text becomes active, `has_pending = false`
-- Status: `PASS`
+- Status: `HISTORICAL PASS` — earlier byte-identical deployment; not rerun on the current address
 - CẦN SNAP: `KHÔNG CẦN`, unless result differs
 
 ## Additional BREAKING branch
 
-After N4b, the maintainer proposed a specification requiring a mandatory authorization token. Natural consensus classified it `BREAKING`. Two invalid activations preserved the pending proposal: `(1, 3)` rolled back with `Breaking change requires major version bump`, and `(2, 1)` rolled back with `Breaking release must start at minor 0`. Activation `(2, 0)` then succeeded; the final version is `2.0`, `last_classification = BREAKING`, and pending state is empty. Status: `PASS`.
+On the earlier byte-identical deployment, the maintainer proposed a specification requiring a mandatory authorization token. Natural consensus classified it `BREAKING`. Two invalid activations preserved the pending proposal: `(1, 3)` rolled back with `Breaking change requires major version bump`, and `(2, 1)` rolled back with `Breaking release must start at minor 0`. Activation `(2, 0)` then succeeded; the final version was `2.0`, `last_classification = BREAKING`, and pending state was empty. Status: `HISTORICAL PASS`; not rerun on the current address.
 
 ## Additional required gates
 
@@ -134,8 +146,9 @@ After N4b, the maintainer proposed a specification requiring a mandatory authori
 |---|---|---|
 | Fresh deployment | Address, deploy tx and source | `PASS` |
 | Source parity | Only CRLF/LF normalization; matching SHA-256 | `PASS` |
-| Natural semantic consensus | NON_BREAKING and BREAKING proposals after source freeze | `PASS` |
-| Authorization | N5a and N5b rollback plus unchanged state | `PASS` |
+| Natural semantic consensus | Current NON_BREAKING proposal and activation | `PASS` |
+| Historical semantic regression | NON_BREAKING and BREAKING branches on earlier byte-identical deployment | `HISTORICAL PASS` |
+| Authorization | N5a and N5b rollback plus unchanged state on current address | `NOT RUN` |
 | Gas probes | `propose_change` at 500 / 1,500 / 3,000 characters | `NOT RUN` |
 | Explorer | Actual v1.1 deployment and transaction history | `PASS` |
 | GenVM/static lint | Real tool output | `NOT RUN` |
