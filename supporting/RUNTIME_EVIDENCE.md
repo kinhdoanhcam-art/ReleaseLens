@@ -31,8 +31,19 @@ A task identifier together with a valid ISO 8601 UTC timestamp is accepted by th
 - GenVM execution result: `SUCCESS`
 - Equivalence output: `NON_BREAKING`
 - Finalized post-state: version `1.0`, `has_pending=True`, `pending_classification=NON_BREAKING`
-- Full transaction hash: `EVIDENCE INCOMPLETE — copy the full hash from Explorer before final submission`
-- Evidence status: `INCOMPLETE` — execution and postcondition are verified, but the full hash has not yet been recorded.
+- Proposal transaction hash: `EVIDENCE INCOMPLETE — copy the full hash from Explorer before final submission`
+- Proposal evidence status: `INCOMPLETE` — execution and postcondition are verified, but the full proposal hash has not yet been recorded.
+
+## Current-address activation
+
+- Method: `activate_pending(1, 1)`
+- Full transaction hash: `0x5d727efcfef7ad3ad839bec1f05e1e84ec4b4a922b9ae769a85ef70e769ac749`
+- Explorer lifecycle: `FINALIZED`
+- Consensus result: `Accepted`
+- GenVM execution result: `SUCCESS`
+- Result code: `Return`
+- Finalized post-state: version `1.1`, `has_pending=False`, `last_classification=NON_BREAKING`, and the proposal text is now active.
+- Evidence status: `PASS`
 
 ## DApp validation
 
@@ -41,6 +52,7 @@ A task identifier together with a valid ISO 8601 UTC timestamp is accepted by th
 - Local deterministic contract suite: PASS — 11/11
 - Maintainer write through the ReleaseLens browser UI: `INCOMPLETE` — execution and postcondition verified; full-hash evidence remains incomplete.
 - Fresh natural semantic consensus on this address: `INCOMPLETE` — `NON_BREAKING` verified; full-hash evidence remains incomplete.
+- Deterministic NON_BREAKING activation on this address: `PASS` — full hash, successful leader execution and finalized postcondition verified.
 - Long-finalization UI handling: `PASS` — production build now preserves a submitted state instead of reporting a false transaction failure after a polling timeout.
 
 The historical full runtime suite from the byte-identical earlier deployment is retained in `history/SemVerGuard_v1.1_RUNTIME_EVIDENCE.md`. It supports contract behavior review but is not presented as transaction evidence for the current address.
