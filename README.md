@@ -14,7 +14,7 @@ The project name and contract source filename are both `ReleaseLens`. The deploy
 - Maintainer: `0x3065E31B1D993d7C0D59E6786844cBa56780B2d3`
 - Explorer: https://explorer-studio.genlayer.com/address/0xd18756fa5bD6003c2a960DF1106a6599F0011064
 
-Live reads confirmed the deployment exposes `get_config`, `get_summary` and `get_pending`. The current finalized state is active version `1.0` with a pending `NON_BREAKING` proposal.
+Live reads confirmed the deployment exposes `get_config`, `get_summary` and `get_pending`. The current finalized state is active version `1.1`, last classification `NON_BREAKING`, with no pending proposal.
 
 ## Product flow
 
