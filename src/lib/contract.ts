@@ -147,6 +147,8 @@ async function writeAndWait(
   const transaction = await client.waitForTransactionReceipt({
     hash: hash as TransactionHash,
     status: TransactionStatus.FINALIZED,
+    interval: 5_000,
+    retries: 360,
   })
   const status = String(transaction.statusName || transaction.status || 'UNKNOWN')
   const result = String(transaction.txExecutionResultName || transaction.txExecutionResult || 'UNKNOWN_EXECUTION')

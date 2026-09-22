@@ -64,6 +64,10 @@ function verdictClass(value: string) {
   return 'neutral'
 }
 
+function isFinalizationTimeout(error: unknown) {
+  return error instanceof Error && /timed out waiting for transaction/i.test(error.message)
+}
+
 function CopyButton({ value, label }: { value: string; label: string }) {
   const [copied, setCopied] = useState(false)
   return (
@@ -147,15 +151,26 @@ function App() {
 
   const submitProposal = async () => {
     if (!account) return void connect()
+    let submittedHash = ''
     setTx({ phase: 'signing', label: 'Proposal', message: 'Estimate fees, then confirm once in your wallet.' })
     try {
       await proposeChange(account, proposal.trim(), (hash) => {
+        submittedHash = hash
         setTx({ phase: 'finalizing', label: 'Proposal', hash, message: 'Submitted. Waiting for finalization and execution result.' })
       })
       setTx((current) => ({ ...current, phase: 'success', message: 'Finalized with successful contract execution.' }))
       setProposal('')
       await refresh()
     } catch (error) {
+      if (submittedHash && isFinalizationTimeout(error)) {
+        setTx({
+          phase: 'submitted',
+          label: 'Proposal',
+          hash: submittedHash,
+          message: 'Still processing after the tracking window. Do not resubmit. Check Explorer, then refresh finalized state.',
+        })
+        return
+      }
       setTx((current) => ({
         ...current,
         phase: 'error',
@@ -166,14 +181,25 @@ function App() {
 
   const submitActivation = async () => {
     if (!account) return void connect()
+    let submittedHash = ''
     setTx({ phase: 'signing', label: 'Activation', message: 'Estimate fees, then confirm once in your wallet.' })
     try {
       await activatePending(account, Number(major), Number(minor), (hash) => {
+        submittedHash = hash
         setTx({ phase: 'finalizing', label: 'Activation', hash, message: 'Submitted. Waiting for finalization and execution result.' })
       })
       setTx((current) => ({ ...current, phase: 'success', message: 'Finalized with successful contract execution.' }))
       await refresh()
     } catch (error) {
+      if (submittedHash && isFinalizationTimeout(error)) {
+        setTx({
+          phase: 'submitted',
+          label: 'Activation',
+          hash: submittedHash,
+          message: 'Still processing after the tracking window. Do not resubmit. Check Explorer, then refresh finalized state.',
+        })
+        return
+      }
       setTx((current) => ({
         ...current,
         phase: 'error',

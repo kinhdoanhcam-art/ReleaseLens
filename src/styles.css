@@ -144,9 +144,11 @@ button:disabled { cursor: not-allowed; opacity: .38; }
 .tx-toast { position: fixed; right: 20px; bottom: 20px; z-index: 30; width: min(440px, calc(100% - 40px)); background: #111822; border: 1px solid var(--line); box-shadow: 0 20px 60px rgba(0,0,0,.45); padding: 16px; display: grid; grid-template-columns: 38px 1fr 24px; gap: 12px; }
 .tx-toast.success { border-color: rgba(80,239,178,.55); }
 .tx-toast.error { border-color: rgba(255,97,117,.55); }
+.tx-toast.submitted { border-color: rgba(53,215,241,.55); }
 .tx-icon { width: 36px; height: 36px; display: grid; place-items: center; border: 1px solid var(--line); color: var(--cyan); }
 .tx-toast.success .tx-icon { color: var(--success); }
 .tx-toast.error .tx-icon { color: var(--danger); }
+.tx-toast.submitted .tx-icon { color: var(--cyan); }
 .tx-toast small { color: #7e91a7; font: 600 9px 'IBM Plex Mono'; letter-spacing: .1em; }
 .tx-toast p { margin: 5px 0 0; color: #c3cedb; font-size: 13px; line-height: 1.45; }
 .tx-toast a { color: var(--cyan); font: 500 10px 'IBM Plex Mono'; display: flex; align-items: center; gap: 5px; margin-top: 7px; }

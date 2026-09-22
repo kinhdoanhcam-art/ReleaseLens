@@ -14,7 +14,7 @@ The project name and contract source filename are both `ReleaseLens`. The deploy
 - Maintainer: `0x3065E31B1D993d7C0D59E6786844cBa56780B2d3`
 - Explorer: https://explorer-studio.genlayer.com/address/0xd18756fa5bD6003c2a960DF1106a6599F0011064
 
-Live reads confirmed the deployment exposes `get_config`, `get_summary` and `get_pending`, with active version `1.0` and no pending proposal at the time of the check.
+Live reads confirmed the deployment exposes `get_config`, `get_summary` and `get_pending`. The current finalized state is active version `1.0` with a pending `NON_BREAKING` proposal.
 
 ## Product flow
 
@@ -24,7 +24,7 @@ Live reads confirmed the deployment exposes `get_config`, `get_summary` and `get
 4. `Activate` calls `activate_pending(new_major, new_minor)` and explains the deterministic SemVer rule.
 5. `Proof` exposes the address, deploy transaction, maintainer and Explorer link.
 
-The UI never treats `ACCEPTED` or `FINALIZED` alone as execution success. A write is shown as successful only when its receipt is accepted/finalized and its execution result is `FINISHED_WITH_RETURN`.
+The UI never treats `ACCEPTED` or `FINALIZED` alone as execution success. A write is shown as successful only when its receipt is finalized and its execution result is `FINISHED_WITH_RETURN`. Polling continues for up to 30 minutes; if that client-side window expires, the UI keeps the transaction in a submitted state, tells the operator not to resubmit, and links to Explorer for authoritative verification.
 
 ## Local development
 
