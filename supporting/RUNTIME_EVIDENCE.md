@@ -1,60 +1,93 @@
 # ReleaseLens — Current Runtime Evidence
 
+Date: 2026-09-24
+
 ## Deployment
 
-- Network: Studionet 61999
-- Contract: `0xd18756fa5bD6003c2a960DF1106a6599F0011064`
-- Deploy transaction: `0x9661d03e732fbe10c27fb24c100a313af479a98f091e03efb99c5e14a8f89873`
-- Maintainer: `0x3065E31B1D993d7C0D59E6786844cBa56780B2d3`
-- Consensus status: `FINALIZED`
-- GenVM result shown by Studio/Explorer: `SUCCESS`
-- Source SHA-256: `bcb38cc46512ead09f762368070f7c2389c1f80aa8dfb4b74549f3a9e56996ad`
+- Network: GenLayer Studionet (`61999`)
+- Contract: `0xe82f184fe005Cc57aAd775C55b38D33885e672C9`
+- Deploy transaction: `0xf692863892d1c7e1f30c3263c4f6a6a3dded59f7564cdd06ef9b3280a8d554e6`
+- Maintainer/deployer: `0x3065E31B1D993d7C0D59E6786844cBa56780B2d3`
+- Explorer: https://explorer-studio.genlayer.com/address/0xe82f184fe005Cc57aAd775C55b38D33885e672C9
+- Frozen packaged source SHA-256: `208bdf4fac0e4a18c953942db3a0248b4f091b0b6d98064babdee0a919e0c976`
+- Explorer lifecycle: `FINALIZED`
+- GenVM execution: `SUCCESS`
 
-## Finalized read smoke test after proposal, before activation
+The deployment was created from the frozen repaired file in this package. Explorer shows the deployment input source and resulting contract address. A separate RPC download-and-rehash of the deployed source was not performed; `SOURCE_SHA256.txt` records that limitation explicitly.
 
-Checked through `genlayer-js@1.1.8` against the current address:
+## Runtime sequence
 
-- `get_config`: PASS — contract v1.1, immutable maintainer, no pending cancellation.
-- `get_summary`: PASS — `active_version=1.0`, expected initial specification, `last_classification=NON_BREAKING`, and a pending proposal.
-- `get_pending`: PASS — `has_pending=True`, `classification=NON_BREAKING`, with the exact wording-only proposal shown below.
-
-## Current-address maintainer proposal
+### N1 — legitimate verdict word remains proposal identity
 
 - Method: `propose_change`
 - Exact parameter:
 
 ```text
-A task identifier together with a valid ISO 8601 UTC timestamp is accepted by the scheduler. Every valid task is queued to execute once, no earlier than that timestamp. The scheduler rejects an invalid timestamp with an error.
+The API returns invoice totals as integer cents. It accepts a valid invoice identifier and returns an error for unknown identifiers. The team labels this NON_BREAKING because this sentence only clarifies that integer cents contain no currency symbol.
 ```
 
-- Explorer lifecycle: `FINALIZED`
-- GenVM execution result: `SUCCESS`
+- Full transaction: `0x45549c574e44f799b249dfa1083fa33c9038d46c8a547e33dbc02efb0f669d29`
+- Explorer: https://explorer-studio.genlayer.com/tx/0x45549c574e44f799b249dfa1083fa33c9038d46c8a547e33dbc02efb0f669d29
 - Equivalence output: `NON_BREAKING`
-- Finalized post-state: version `1.0`, `has_pending=True`, `pending_classification=NON_BREAKING`
-- Full transaction hash: `0x85d4b13c0ea984d52e73963785d569bd545d7df8741204ee920b17fe45ed1a0b`
-- Consensus result: `Accepted`
-- Result code: `Return`
-- Proposal evidence status: `PASS`
+- Consensus/execution: `Accepted` / `SUCCESS`
+- Post-state: version `1.0`; exact proposal pending as `NON_BREAKING`
+- Status: `PASS`
 
-## Current-address activation
+### N2 — invalid NON_BREAKING major bump rolls back
+
+- Method: `activate_pending(2, 0)`
+- Full transaction: `0x3efb902dce45603f64c00afdd8736775a901276ec89b2573a294034134955d4b`
+- Explorer: https://explorer-studio.genlayer.com/tx/0x3efb902dce45603f64c00afdd8736775a901276ec89b2573a294034134955d4b
+- Execution result: `ERROR` / rollback `Non-breaking change must keep major version`
+- Post-state: version `1.0`; the exact N1 proposal remained pending and unchanged
+- Status: `PASS`
+
+### N3 — valid NON_BREAKING activation
 
 - Method: `activate_pending(1, 1)`
-- Full transaction hash: `0x5d727efcfef7ad3ad839bec1f05e1e84ec4b4a922b9ae769a85ef70e769ac749`
+- Full transaction: `0x52f649833bcf0ece32e7f52b0a910c9a929726ac26023712d5e1eebe5c86db5a`
+- Explorer: https://explorer-studio.genlayer.com/tx/0x52f649833bcf0ece32e7f52b0a910c9a929726ac26023712d5e1eebe5c86db5a
+- Consensus/execution: `Accepted` / `SUCCESS`
+- Lifecycle: `FINALIZED`
+- Post-state: version `1.1`; N1 text active; no pending proposal
+- Status: `PASS`
+
+### B1 — BREAKING word remains proposal identity
+
+- Method: `propose_change`
+- Exact parameter:
+
+```text
+The API returns invoice totals as decimal currency units instead of integer cents. Existing consumers must update their parsing and arithmetic. The team labels this a BREAKING migration.
+```
+
+- Full transaction: `0xa9803c0fd7695f12ada807b021283fd56d67d5835f2d7e6fb2bc629ee315e34d`
+- Explorer: https://explorer-studio.genlayer.com/tx/0xa9803c0fd7695f12ada807b021283fd56d67d5835f2d7e6fb2bc629ee315e34d
+- Equivalence output: `BREAKING`
 - Explorer lifecycle: `FINALIZED`
-- Consensus result: `Accepted`
-- GenVM execution result: `SUCCESS`
-- Result code: `Return`
-- Finalized post-state: version `1.1`, `has_pending=False`, `last_classification=NON_BREAKING`, and the proposal text is now active.
-- Evidence status: `PASS`
+- GenVM execution/result code: `SUCCESS` / `Return`
+- Post-state: exact proposal pending as `BREAKING`
+- Status: `PASS`
 
-## DApp validation
+### B2 — valid BREAKING activation
 
-- TypeScript check: PASS
-- Vite production build: PASS
-- Local deterministic contract suite: PASS — 11/11
-- Maintainer write through the ReleaseLens browser UI: `PASS` — full hash, successful leader execution and finalized postcondition verified.
-- Fresh natural semantic consensus on this address: `PASS` — `NON_BREAKING`, with full transaction evidence.
-- Deterministic NON_BREAKING activation on this address: `PASS` — full hash, successful leader execution and finalized postcondition verified.
-- Long-finalization UI handling: `PASS` — production build now preserves a submitted state instead of reporting a false transaction failure after a polling timeout.
+- Method: `activate_pending(2, 0)`
+- Full transaction: `0xb1362860a3deb6ff5f515335e6d1e62ea4397b99493a3c48f90ffd50f5192063`
+- Explorer: https://explorer-studio.genlayer.com/tx/0xb1362860a3deb6ff5f515335e6d1e62ea4397b99493a3c48f90ffd50f5192063
+- Consensus/execution: `Accepted` / `SUCCESS`
+- Lifecycle: `FINALIZED`
+- Final authoritative read: `active_version=2.0`, `last_classification=BREAKING`, `has_pending=NO`, empty pending classification, and the exact B1 text is active
+- Status: `PASS`
 
-The historical full runtime suite from the byte-identical earlier deployment is retained in `history/SemVerGuard_v1.1_RUNTIME_EVIDENCE.md`. It supports contract behavior review but is not presented as transaction evidence for the current address.
+## Validation summary
+
+- Fresh deploy and Explorer address: `PASS`
+- Natural `NON_BREAKING` consensus: `PASS`
+- Invalid version transition rollback with unchanged pending state: `PASS`
+- Valid `NON_BREAKING` activation: `PASS`
+- Natural `BREAKING` consensus: `PASS`
+- Valid `BREAKING` activation and finalized `2.0` post-state: `PASS`
+- Local deterministic suite: `13/13 PASS`
+- TypeScript check and Vite production build: `PASS`
+
+Selected Studio and Explorer screenshots are indexed in `snapshots/README.md`. Older deployment evidence remains under `history/` and is not used to claim current-address execution.

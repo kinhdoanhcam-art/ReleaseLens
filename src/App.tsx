@@ -293,7 +293,7 @@ function App() {
           <div><small>ACTIVE VERSION</small><strong>{loading ? '···' : `v${snapshot.activeVersion}`}</strong><span>finalized release</span></div>
           <div><small>PENDING</small><strong>{loading ? '···' : snapshot.hasPending ? 'YES' : 'NO'}</strong><span>proposal lock</span></div>
           <div><small>LAST VERDICT</small><strong className={verdictClass(snapshot.lastClassification)}>{snapshot.lastClassification || '—'}</strong><span>semantic consensus</span></div>
-          <div><small>SOURCE</small><strong>VERIFIED</strong><span>{shortAddress(CONTRACT_ADDRESS, 8, 6)}</span></div>
+          <div><small>SOURCE</small><strong>FROZEN</strong><span>{shortAddress(CONTRACT_ADDRESS, 8, 6)}</span></div>
         </section>
 
         {readError && (
@@ -422,7 +422,7 @@ function App() {
           <div className="tx-icon">
             {tx.phase === 'success' ? <Check size={18} /> : tx.phase === 'error' ? <CircleAlert size={18} /> : <LoaderCircle className="spin" size={18} />}
           </div>
-          <div><small>{tx.label || 'TRANSACTION'} / {tx.phase.toUpperCase()}</small><p>{tx.message}</p>{tx.hash && <a href={`https://explorer-studio.genlayer.com/transactions/${tx.hash}`} target="_blank" rel="noreferrer">{shortAddress(tx.hash, 12, 8)} <ExternalLink size={12} /></a>}</div>
+          <div><small>{tx.label || 'TRANSACTION'} / {tx.phase.toUpperCase()}</small><p>{tx.message}</p>{tx.hash && <a href={`https://explorer-studio.genlayer.com/tx/${tx.hash}`} target="_blank" rel="noreferrer">{shortAddress(tx.hash, 12, 8)} <ExternalLink size={12} /></a>}</div>
           <button onClick={() => setTx({ phase: 'idle' })}>×</button>
         </aside>
       )}

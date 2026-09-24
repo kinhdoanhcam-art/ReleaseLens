@@ -1,10 +1,11 @@
-bcb38cc46512ead09f762368070f7c2389c1f80aa8dfb4b74549f3a9e56996ad  contracts/ReleaseLens.py
+208bdf4fac0e4a18c953942db3a0248b4f091b0b6d98064babdee0a919e0c976  contracts/ReleaseLens.py
 
-Computed from the LF contract source bytes packaged with ReleaseLens.
-RPC raw deployed-source SHA-256:
-1b290fd96ad74859d815a21774d732b47621b523c1394ae37b0d722ab2305d27
+Computed from the LF contract source bytes after the 2026-09-24 steward fix.
 
-RPC deployed-source SHA-256 after CRLF-to-LF normalization:
-bcb38cc46512ead09f762368070f7c2389c1f80aa8dfb4b74549f3a9e56996ad
+Fresh Project deployment: PASS
+Contract: 0xe82f184fe005Cc57aAd775C55b38D33885e672C9
+Deploy transaction: 0xf692863892d1c7e1f30c3263c4f6a6a3dded59f7564cdd06ef9b3280a8d554e6
+Explorer lifecycle: FINALIZED
+GenVM result: SUCCESS
 
-Deployed-source parity: PASS. The only normalization applied was CRLF to LF.
+The exact frozen file above was used for the fresh Studio deployment and the Explorer deployment record displays its source. An independent RPC download-and-rehash endpoint was not available in this workflow, so no separate RPC source SHA-256 is claimed.

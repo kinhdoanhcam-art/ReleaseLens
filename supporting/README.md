@@ -7,8 +7,9 @@ The submission root is kept intentionally small. These files provide audit, runt
 - `LOCKED_SPEC.md` and `BLIND_RUNTIME_PROTOCOL.md` — frozen requirements and execution protocol.
 - `SECURITY.md` and `CHANGELOG.md` — security notes and release history.
 - `SUBMISSION_NOTE.md` — concise release metadata.
+- `STEWARD_FIX_EVIDENCE.md` — measured local proof for the exact-text identity repair.
 - `tests/` — local deterministic unit suite.
 - `snapshots/` — optional runtime screenshots, if a submission portal requires them.
-- `history/` — evidence from the byte-identical earlier deployment, kept separate from the current address.
+- `history/` — earlier deployment evidence, kept separate from the current address and not used for current runtime claims.
 
-None of these files changes the deployed contract logic in `../contracts/ReleaseLens.py`.
+The 2026-09-24 steward fix is freshly deployed at `0xe82f184fe005Cc57aAd775C55b38D33885e672C9`; the finalized path is recorded in `RUNTIME_EVIDENCE.md`.

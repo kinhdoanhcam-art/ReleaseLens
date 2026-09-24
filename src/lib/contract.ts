@@ -3,10 +3,10 @@ import { studionet } from 'genlayer-js/chains'
 import { ExecutionResult, TransactionHash, TransactionHashVariant, TransactionStatus } from 'genlayer-js/types'
 
 export const CONTRACT_ADDRESS = (import.meta.env.VITE_CONTRACT_ADDRESS ||
-  '0xd18756fa5bD6003c2a960DF1106a6599F0011064') as `0x${string}`
+  '0xe82f184fe005Cc57aAd775C55b38D33885e672C9') as `0x${string}`
 
 export const DEPLOY_TX = (import.meta.env.VITE_DEPLOY_TX ||
-  '0x9661d03e732fbe10c27fb24c100a313af479a98f091e03efb99c5e14a8f89873') as `0x${string}`
+  '0xf692863892d1c7e1f30c3263c4f6a6a3dded59f7564cdd06ef9b3280a8d554e6') as `0x${string}`
 
 export const EXPLORER_URL = `https://explorer-studio.genlayer.com/address/${CONTRACT_ADDRESS}`
 export const CHAIN_ID = 61999
